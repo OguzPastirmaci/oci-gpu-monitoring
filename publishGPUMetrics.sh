@@ -1,7 +1,26 @@
 #!/bin/bash
 
 # Write logs to /tmp/gpuMetrics.log
-exec 3>&1 1>>/tmp/gpuMetrics.log 2>&1
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+exec 1>/tmp/gpuMetrics.log 2>&1
+date
+
+# Check if OCI CLI, jq, and curl is installed
+if ! [ -x "$(command -v oci)" ]; then
+  echo 'Error: OCI CLI is not installed. Please follow the instructions in this link: https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliinstall.htm' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v jq)" ]; then
+  echo 'Error: jq is not installed.' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v curl)" ]; then
+  echo 'Error: curl is not installed.' >&2
+  exit 1
+fi
 
 # Getting instance metadata. For more information, check this link: https://docs.cloud.oracle.com/iaas/Content/Compute/Tasks/gettingmetadata.htm
 # By default, metrics are published to the same compartment with the instance being monitored. You may change the following variables if you want to use different values.
@@ -86,4 +105,4 @@ metricsJson=$(cat << EOF > /tmp/metrics.json
 EOF
 )
 
-oci monitoring metric-data post --metric-data file:///tmp/metrics.json --endpoint https://telemetry-ingestion.$endpointRegion.oraclecloud.com
+/home/ubuntu/bin/oci monitoring metric-data post --metric-data file:///tmp/metrics.json --endpoint https://telemetry-ingestion.$endpointRegion.oraclecloud.com
