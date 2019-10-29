@@ -6,8 +6,11 @@ trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>/tmp/gpuMetrics.log 2>&1
 date
 
+# OCI CLI binary location
+cliLocation="/home/ubuntu/bin/"
+
 # Check if OCI CLI, jq, and curl is installed
-if ! [ -x "$(command -v oci)" ]; then
+if ! [ -x "$(command -v $cliLocation/oci)" ]; then
   echo 'Error: OCI CLI is not installed. Please follow the instructions in this link: https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliinstall.htm' >&2
   exit 1
 fi
@@ -105,4 +108,4 @@ metricsJson=$(cat << EOF > /tmp/metrics.json
 EOF
 )
 
-/home/ubuntu/bin/oci monitoring metric-data post --metric-data file:///tmp/metrics.json --endpoint https://telemetry-ingestion.$endpointRegion.oraclecloud.com
+$cliLocation/oci monitoring metric-data post --metric-data file:///tmp/metrics.json --endpoint https://telemetry-ingestion.$endpointRegion.oraclecloud.com
