@@ -42,7 +42,7 @@ instanceId=$(curl -s -L http://169.254.169.254/opc/v1/instance/ | jq -r '.id')
 endpointRegion=$(curl -s -L http://169.254.169.254/opc/v1/instance/ | jq -r '.canonicalRegionName')
 
 # Getting data from nvidia-smi and converting them to OCI monitoring compliant values. This script publishes GPU Temperature, GPU Utilization, and GPU Memory Utilization.
-# Here's the list of available queries with nvidia-smi: https://nvidia.custhelp.com/app/answers/detail/a_id/3751/~/useful-nvidia-smi-queries
+# Run "nvidia-smi --help-query-gpu" to get the list of available metrics
 getMetrics=$(nvidia-smi --query-gpu=timestamp,temperature.gpu,utilization.gpu,utilization.memory --format=csv,noheader,nounits)
 gpuTimestamp=$(echo $getMetrics | awk -F, '{print $1}' | sed -e 's/\.[^.]*$//' -e 's/ /T/' -e 's/\//-/g' -e 's/$/Z/')
 gpuTemperature=$(echo $getMetrics | awk -F, '{print $2}' | xargs)

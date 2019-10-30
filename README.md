@@ -4,20 +4,20 @@ Currently, the Oracle Cloud Infrastructure (OCI) [Monitoring service](https://do
 
 However, it's possible to [publish custom metrics](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Tasks/publishingcustommetrics.htm) to OCI Monitoring service. This repo has the necessary information and the shell script for publishing **GPU temperature, GPU utilization, and GPU memory utilization** from GPU instances to OCI Monitoring service.
 
-If you have any problems, feel free to create an [issue](https://github.com/OguzPastirmaci/oci-gpu-monitoring/issues).
+If you encounter any problems when following this guide, feel free to create an [issue](https://github.com/OguzPastirmaci/oci-gpu-monitoring/issues).
 
 ## Prerequisites
 
 ### IAM Policy
 The script publishes the metrics to the same compartment as the GPU instance being monitored by default. You probably have the necessary IAM policy already configured for your user.
 
-If you plan to use a separate compartment for publishing the metrics, or if you get a message that you don’t have permission or are unauthorized, check with your administrator.
+If you plan to use a separate compartment for publishing the metrics, or if you get a message that you don’t have permission or are unauthorized, check with your tenancy administrator.
 
-You can find more info in [this link](https://docs.cloud.oracle.com/iaas/Content/Identity/Concepts/commonpolicies.htm#metrics-publish).
+You can find more info on policies in [this link](https://docs.cloud.oracle.com/iaas/Content/Identity/Concepts/commonpolicies.htm#metrics-publish).
 
 
 ### OCI CLI
-The script uses OCI CLI for uploading the metrics to OCI Monitoring service, so the CLI must be installed in the GPU instance that you want to monitor.
+The script uses OCI CLI for uploading the metrics to OCI Monitoring service, so the CLI must be installed in the GPU instances that you want to monitor.
 
 You can install the OCI CLI by running the following command:
 
@@ -39,7 +39,7 @@ To have the CLI walk you through the first-time setup process, use the `oci setu
 You can find more information on OCI CLI in [this link](https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm).
 
 ### NVIDIA System Management Interface (nvidia-smi)
-The script uses `nvidia-smi` command line utility to gather metrics data from the GPUs in the instance. If you are already using your GPU instances you should already have  the appropriate NVIDIA drivers installed. The script also checks if it's installed but you may SSH into your GPU instance and run `nvidia-smi` in the command line. You should see an output like this:
+The script uses `nvidia-smi` command line utility to gather metrics data from the GPUs in the instance. If you are already using your GPU instances for running GPU workloads, you most likely already have the appropriate NVIDIA drivers installed. The script checks if it's installed, but you may SSH into your GPU instance and run `nvidia-smi` in the command line. You should see an output like this:
 
 ```console
 [opc@gputest ~]$ nvidia-smi
@@ -77,7 +77,7 @@ sudo yum install -y git
 sudo apt-get install -y git
 ```
 
-2. Clone the repository
+2. Clone this repository
 ```sh
 git clone https://github.com/OguzPastirmaci/oci-gpu-monitoring.git
 ```
@@ -93,7 +93,7 @@ cd oci-gpu-monitoring
 sh ./publishGPUMetrics.sh
 ```
 
-5. By default, the scripts writes logs to `/tmp/gpuMetrics.log`. Check the logs to see if there were any errors. You should see a log similar to following if the script has run successfully.
+5. By default, the script writes logs to `/tmp/gpuMetrics.log`. Check the logs to see if there were any errors. You should see a log similar to following if the script has run successfully.
 
 ```sh
 [opc@gputest oci-gpu-monitoring]$ cat /tmp/gpuMetrics.log
@@ -107,16 +107,16 @@ Wed Oct 30 18:58:24 GMT 2019
 }
 ```
 
-6. Now let's create a Cron job so the script runs regularly. In the below example, we will run the script every minute but you can change the frequency of the Cron job depending on your needs.
+6. If you don't see any errors in the logs, let's create a Cron job so the script runs automatically. The example job below runs the script every minute, but you can change the frequency of the Cron job depending on your needs.
 
 Open the crontab file:
 ```sh
 crontab -e
 ```
 
-7. Add the following line then save and quit:
+7. Add the following line then save the file:
 
-**IMPORTANT**: If you change the script location, update the below commands with the new location.
+**IMPORTANT**: If you have changed the script location, update the below commands with the new location.
 
 **Oracle Linux / CentOS**
 ```sh
@@ -128,12 +128,12 @@ crontab -e
 * * * * * sh /home/ubuntu/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
 
-8. Check the Cron jobs list to make sure our job is there
+8. Check the Cron jobs list to make sure the job is listed:
 ```sh
 crontab -l
 ```
 
-You should see the following line (or similar to it if you changed the location of the script) in the list of jobs:
+You should see the following line (or similar to it if you have changed the location of the script) in the list of jobs:
 
 ```sh
 [opc@gputest oci-gpu-monitoring]$ crontab -l
@@ -141,17 +141,17 @@ You should see the following line (or similar to it if you changed the location 
 * * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
 
-9. Wait a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are being published to OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
+9. Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
 
 ![](./images/console-monitoring.png)
 
 10. In Metrics Explorer, select the following values and click on **Update Chart** in the bottom.
 
-**Compartment:** Name of the compartment that you publish your metrics. Default value is the same compartment with the GPU instance being monitored. You can configure it in the shell script by changing the `compartmentId` variable.
+**Compartment:** Name of the compartment that you publish the metrics. Default value is the same compartment with the GPU instance being monitored. You can configure it in the shell script by changing the value of `compartmentId` variable.
 
-**Metric Namespace:** Default value is `gpu_monitoring`. You can configure it in the shell script by changing the `metricNamespace` variable.
+**Metric Namespace:** Default value is `gpu_monitoring`. You can configure it in the shell script by changing the value of `metricNamespace` variable.
 
-**Resource Group:** Default value is `gpu_monitoring_rg`. You can configure it in the shell script by changing the `metricResourceGroup` variable.
+**Resource Group:** Default value is `gpu_monitoring_rg`. You can configure it in the shell script by changing the value of `metricResourceGroup` variable.
 
 **Metric Name**: Default values are `gpuMemoryUtilization`, `gpuTemperature`, and `gpuUtilization`. Let's choose `gpuTemperature` so we can see some non-zero data.
 
@@ -180,7 +180,7 @@ Visit this link to get more info on [Monitoring Query Language (MQL)](https://do
 ## FAQ
 1. Are other GPU metrics available than GPU temperature, GPU utilization, and GPU memory utilization?
    
-The script uses `nvidia-smi` to get the metrics and then converts the data to OCI Monitoring compatible json. So any metric available in `nvidia-smi` can be published in the OCI console.
+The script uses `nvidia-smi` to get the metrics and then converts the data to OCI Monitoring compatible json. So any metric available in `nvidia-smi` can be published to OCI Monitoring service.
 
 You can get a complete list of the query arguments by running:
 
@@ -188,7 +188,7 @@ You can get a complete list of the query arguments by running:
 nvidia-smi --help-query-gpu
 ```
 
-For example, let's say you want to also publish total free memory of the GPU. You can add the following variable to the script:
+For example, let's say you want to publish total free memory of the GPU. You can add the following variable to the script:
 
 ```sh
 gpuFreeMemory=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)
