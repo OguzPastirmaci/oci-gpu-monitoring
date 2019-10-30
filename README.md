@@ -153,8 +153,13 @@ You should see the following line in the list of jobs:
 
 ![](./images/metrics-explorer.png)
 
-12. Instead of selecting the values from the fields in the console, you may also use the `Query Code Editor`. Here's the query to get the same chart as above:
+12. Instead of selecting the values from the fields in the console, you may also use the **Query Code Editor** by checking the `Advanced Mode` box. For example, here's the query to get the same chart as above:
 
 ```console
 gpuTemperature[1m]{resourceId = "ocid1.instance.oc1.iad.anuwcljsugt6wmqcm2uoyvg7jpkok64dt2d4ren5lirbvorlphobykh2jx2q"}.mean()
 ```
+
+Visit this link to get more info on [Monitoring Query Language (MQL)](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Reference/mql.htm).
+
+
+![](./images/query-editor.png)
