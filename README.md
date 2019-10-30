@@ -174,3 +174,48 @@ gpuTemperature[1m]{resourceId = "ocid1.instance.oc1.iad.anuwcljsugt6wmqcm2uoyvg7
 ![](./images/query-editor.png)
 
 Visit this link to get more info on [Monitoring Query Language (MQL)](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Reference/mql.htm).
+
+
+
+## FAQ
+1. Are other GPU metrics available than GPU temperature, GPU utilization, and GPU memory utilization?
+   
+The script uses `nvidia-smi` to get the metrics and then converts the data to OCI Monitoring compatible json. So any metric available in `nvidia-smi` can be published in the OCI console.
+
+You can get a complete list of the query arguments by running:
+
+```sh
+nvidia-smi --help-query-gpu
+```
+
+For example, let's say you want to also publish total free memory of the GPU. You can add the following variable to the script:
+
+```sh
+gpuFreeMemory=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)
+```
+
+Then add a new block in the json payload in the script that is sent to OCI Monitoring service.
+
+```json
+[
+   {
+      "namespace":"$metricNamespace",
+      "compartmentId":"$compartmentId",
+      "resourceGroup":"$metricResourceGroup",
+      "name":"gpuFreeMemory",
+      "dimensions":{
+         "resourceId":"$instanceId",
+         "instanceName":"$instanceName"
+      },
+      "metadata":{
+         "unit":"MiB",
+         "displayName":"Total free memory"
+      },
+      "datapoints":[
+         {
+            "timestamp":"$gpuTimestamp",
+            "value":$gpuFreeMemory
+         }
+      ]
+   }
+```
