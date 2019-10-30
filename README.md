@@ -4,6 +4,8 @@ Currently, the Oracle Cloud Infrastructure (OCI) [Monitoring service](https://do
 
 However, it's possible to publish custom metrics to OCI Monitoring service. This repo has the necessary information and the script for publishing GPU temperature, GPU utilization, and GPU memory utilization from GPU instances to OCI Monitoring service.
 
+IMPORTANT: The instructions in this guide are based on Oracle Linux.
+
 ## Prerequisites
 
 ### IAM Policy
@@ -84,7 +86,75 @@ cd oci-gpu-monitoring
 sh ./publishGPUMetrics.sh
 ```
 
-5- By default, the scripts writes logs to `/tmp/gpuMetrics.log`. Let's check the logs to see if there were any errors.
+5- By default, the scripts writes logs to `/tmp/gpuMetrics.log`. Let's check the logs to see if there were any errors. You should see a log similar to following if there was no errors.
 
 ```sh
+[opc@gputest oci-gpu-monitoring]$ cat /tmp/gpuMetrics.log
 
+Wed Oct 30 18:58:24 GMT 2019
+{
+  "data": {
+    "failed-metrics": [],
+    "failed-metrics-count": 0
+  }
+}
+```
+
+6- Now let's create a Cron job so the script runs regularly. In the below example, I will run the script every minute but you can change the frequency of the Cron job if you need to.
+
+Open the crontab file:
+```sh
+crontab -e
+```
+
+7- Add the following line then save and quit:
+
+```sh
+* * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
+```
+
+**IMPORTANT**: If you change the script location, update the above command with the new location.
+
+8- Check the Cron jobs list to make sure our job is there
+```sh
+crontab -l
+```
+
+You should see the following line in the list of jobs:
+
+```sh
+[opc@gputest oci-gpu-monitoring]$ crontab -l
+
+* * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
+```
+
+9- Let's login to OCI console and check if our metrics are being published to OCI Monitoring service. After you login, go to Monitoring > Metrics Explorer.
+
+![](./images/console-monitoring.png)
+
+10- In Metrics Explorer, select the following values and click on `Update Chart` in the bottom.
+
+**Compartment:** Name of the compartment that you publish your metrics. Default value is the same compartment with the GPU instance being monitored.
+
+**Metric Namespace:** Default value is `gpu_monitoring`. You can configure it in the shell script by changing the `metricNamespace` variable.
+
+**Resource Group:** Default value is `gpu_monitoring_rg`. You can configure it in the shell script by changing the `metricResourceGroup` variable.
+
+**Metric Name**: Default values are `gpuMemoryUtilization`, `gpuTemperature`, and `gpuUtilization`. Let's choose `gpuTemperature` so we can see some non-zero data.
+
+**Interval:** Default value `1m`. Select any value in the console that suits your needs.
+
+**Statistic:** Default value is `Mean`. Select any value in the console that suits your needs.
+
+**Dimension Name:** You can choose either `resourceId` or `instanceName`. `resourceId` is the OCID of the GPU instance, and `instanceName` is the display name of the GPU instance.
+
+
+10- You should be seeing some values in the chart now.
+
+![](./images/metrics-explorer.png)
+
+11- Instead of selecting the values from the fields in the console, you may also use the `Query Code Editor`. Here's the query to get the same chart as above:
+
+```console
+gpuTemperature[1m]{resourceId = "ocid1.instance.oc1.iad.anuwcljsugt6wmqcm2uoyvg7jpkok64dt2d4ren5lirbvorlphobykh2jx2q"}.mean()
+```
