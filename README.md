@@ -4,7 +4,7 @@ Currently, the Oracle Cloud Infrastructure (OCI) [Monitoring service](https://do
 
 However, it's possible to publish custom metrics to OCI Monitoring service. This repo has the necessary information and the script for publishing GPU temperature, GPU utilization, and GPU memory utilization from GPU instances to OCI Monitoring service.
 
-IMPORTANT: The instructions in this guide are based on Oracle Linux.
+If you have any problems, feel free to create an [issue](https://github.com/OguzPastirmaci/oci-gpu-monitoring/issues).
 
 ## Prerequisites
 
@@ -66,11 +66,18 @@ Wed Oct 30 18:29:24 2019
 ## Steps for publishing GPU metrics to OCI Monitoring service
 
 1. Install git
+
+**Oracle Linux / CentOS**
 ```sh
-sudo yum install git
+sudo yum install -y git
 ```
 
-2. Clone the repository
+**Ubuntu**
+```sh
+sudo apt-get install -y git
+```
+
+1. Clone the repository
 ```sh
 git clone https://github.com/OguzPastirmaci/oci-gpu-monitoring.git
 ```
@@ -109,8 +116,14 @@ crontab -e
 
 7. Add the following line then save and quit:
 
+**Oracle Linux / CentOS**
 ```sh
 * * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
+```
+
+**Ubuntu**
+```sh
+* * * * * sh /home/ubuntu/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
 
 **IMPORTANT**: If you change the script location, update the above command with the new location.
@@ -120,7 +133,7 @@ crontab -e
 crontab -l
 ```
 
-You should see the following line in the list of jobs:
+You should see the following line (or similar to it if you changed the location of the script) in the list of jobs:
 
 ```sh
 [opc@gputest oci-gpu-monitoring]$ crontab -l
@@ -158,8 +171,6 @@ You should see the following line in the list of jobs:
 ```console
 gpuTemperature[1m]{resourceId = "ocid1.instance.oc1.iad.anuwcljsugt6wmqcm2uoyvg7jpkok64dt2d4ren5lirbvorlphobykh2jx2q"}.mean()
 ```
+![](./images/query-editor.png)
 
 Visit this link to get more info on [Monitoring Query Language (MQL)](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Reference/mql.htm).
-
-
-![](./images/query-editor.png)
