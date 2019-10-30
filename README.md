@@ -2,7 +2,7 @@
 
 Currently, the Oracle Cloud Infrastructure (OCI) [Monitoring service](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Concepts/monitoringoverview.htm) does not have built-in support for collecting GPU metrics from GPU instances.
 
-However, it's possible to publish custom metrics to OCI Monitoring service. This repo has the necessary information and the script for publishing GPU temperature, GPU utilization, and GPU memory utilization from GPU instances to OCI Monitoring service.
+However, it's possible to [publish custom metrics](https://docs.cloud.oracle.com/iaas/Content/Monitoring/Tasks/publishingcustommetrics.htm) to OCI Monitoring service. This repo has the necessary information and the shell script for publishing **GPU temperature, GPU utilization, and GPU memory utilization** from GPU instances to OCI Monitoring service.
 
 If you have any problems, feel free to create an [issue](https://github.com/OguzPastirmaci/oci-gpu-monitoring/issues).
 
@@ -77,7 +77,7 @@ sudo yum install -y git
 sudo apt-get install -y git
 ```
 
-1. Clone the repository
+2. Clone the repository
 ```sh
 git clone https://github.com/OguzPastirmaci/oci-gpu-monitoring.git
 ```
@@ -87,13 +87,13 @@ git clone https://github.com/OguzPastirmaci/oci-gpu-monitoring.git
 cd oci-gpu-monitoring
 ```
 
-4. We will create a Cron job to run the script every minute, but before that let's run the script manually to check we don't get any errors.
+4. We will create a Cron job to run the script every minute, but before that let's run the script manually to check that we don't get any errors.
 
 ```sh
 sh ./publishGPUMetrics.sh
 ```
 
-5. By default, the scripts writes logs to `/tmp/gpuMetrics.log`. Let's check the logs to see if there were any errors. You should see a log similar to following if there was no errors.
+5. By default, the scripts writes logs to `/tmp/gpuMetrics.log`. Check the logs to see if there were any errors. You should see a log similar to following if the script has run successfully.
 
 ```sh
 [opc@gputest oci-gpu-monitoring]$ cat /tmp/gpuMetrics.log
@@ -107,7 +107,7 @@ Wed Oct 30 18:58:24 GMT 2019
 }
 ```
 
-6. Now let's create a Cron job so the script runs regularly. In the below example, I will run the script every minute but you can change the frequency of the Cron job if you need to.
+6. Now let's create a Cron job so the script runs regularly. In the below example, we will run the script every minute but you can change the frequency of the Cron job depending on your needs.
 
 Open the crontab file:
 ```sh
@@ -115,6 +115,8 @@ crontab -e
 ```
 
 7. Add the following line then save and quit:
+
+**IMPORTANT**: If you change the script location, update the below commands with the new location.
 
 **Oracle Linux / CentOS**
 ```sh
@@ -125,8 +127,6 @@ crontab -e
 ```sh
 * * * * * sh /home/ubuntu/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
-
-**IMPORTANT**: If you change the script location, update the above command with the new location.
 
 8. Check the Cron jobs list to make sure our job is there
 ```sh
@@ -141,7 +141,7 @@ You should see the following line (or similar to it if you changed the location 
 * * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
 
-9. Wait a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if our metrics are being published to OCI Monitoring service. After you login, go to **Monitoring > Metrics Explorer**.
+9. Wait a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are being published to OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
 
 ![](./images/console-monitoring.png)
 
@@ -166,7 +166,7 @@ You should see the following line (or similar to it if you changed the location 
 
 ![](./images/metrics-explorer.png)
 
-12. Instead of selecting the values from the fields in the console, you may also use the **Query Code Editor** by checking the `Advanced Mode` box. For example, here's the query to get the same chart as above:
+12. Instead of selecting the values from the fields in the console, you may also use the **Query Code Editor** by checking the **Advanced Mode** box. For example, here's the query to get the same chart as above:
 
 ```console
 gpuTemperature[1m]{resourceId = "ocid1.instance.oc1.iad.anuwcljsugt6wmqcm2uoyvg7jpkok64dt2d4ren5lirbvorlphobykh2jx2q"}.mean()
