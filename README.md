@@ -197,7 +197,6 @@ gpuFreeMemory=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits
 Then add a new block in the json payload in the script that is sent to OCI Monitoring service.
 
 ```json
-[
    {
       "namespace":"$metricNamespace",
       "compartmentId":"$compartmentId",
