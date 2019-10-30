@@ -11,9 +11,14 @@ date
 # Default installation location for Ubuntu is /home/ubuntu/bin/oci
 cliLocation="/home/opc/bin/oci"
 
-# Check if OCI CLI, jq, and curl is installed
+# Check if OCI CLI, nvidia-smi, jq, and curl is installed
 if ! [ -x "$(command -v $cliLocation)" ]; then
   echo 'Error: OCI CLI is not installed. Please follow the instructions in this link: https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliinstall.htm' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v nvidia-smi)" ]; then
+  echo 'Error: nvidia-smi is not installed.' >&2
   exit 1
 fi
 
