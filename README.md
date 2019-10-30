@@ -178,7 +178,7 @@ Visit this link to get more info on [Monitoring Query Language (MQL)](https://do
 
 
 ## FAQ
-1. Are other GPU metrics available than GPU temperature, GPU utilization, and GPU memory utilization?
+1. Are there any other GPU metrics available than GPU temperature, GPU utilization, and GPU memory utilization?
    
 The script uses `nvidia-smi` to get the metrics and then converts the data to OCI Monitoring compatible json. So any metric available in `nvidia-smi` can be published to OCI Monitoring service.
 
@@ -197,7 +197,6 @@ gpuFreeMemory=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits
 Then add a new block in the json payload in the script that is sent to OCI Monitoring service.
 
 ```json
-[
    {
       "namespace":"$metricNamespace",
       "compartmentId":"$compartmentId",
