@@ -7,7 +7,7 @@ exec 1>/tmp/gpuMetrics.log 2>&1
 date
 
 # OCI CLI binary location
-cliLocation="/home/ubuntu/bin/oci"
+cliLocation="/home/opc/bin/oci"
 
 # Check if OCI CLI, jq, and curl is installed
 if ! [ -x "$(command -v $cliLocation)" ]; then
