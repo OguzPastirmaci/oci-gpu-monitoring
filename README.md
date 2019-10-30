@@ -28,8 +28,8 @@ bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scrip
 
 ```sh
 # OCI CLI binary location
-# Default installation location for Oracle Linux and CentOS is /home/opc/bin/oci
-# Default installation location for Ubuntu is /home/ubuntu/bin/oci
+# Default installation location for Oracle Linux 7 is /home/opc/bin/oci
+# Default installation location for Ubuntu 18.04 and Ubuntu 16.04 is /home/ubuntu/bin/oci
 cliLocation="/home/opc/bin/oci"
 ```
 
@@ -67,12 +67,12 @@ Wed Oct 30 18:29:24 2019
 
 1. Install git
 
-**Oracle Linux / CentOS**
+**Oracle Linux 7**
 ```sh
 sudo yum install -y git
 ```
 
-**Ubuntu**
+**Ubuntu 16.04 / Ubuntu 18.04**
 ```sh
 sudo apt-get install -y git
 ```
@@ -107,7 +107,7 @@ Wed Oct 30 18:58:24 GMT 2019
 }
 ```
 
-6. If you don't see any errors in the logs, let's create a Cron job so the script runs automatically. The example job below runs the script every minute, but you can change the frequency of the Cron job depending on your needs.
+6. If you don't see any errors in the logs, let's create a Cron job so the script runs automatically. The example job below runs the script every minute, but you can change the frequency of the Cron job depending on your needs. Custom metrics can be posted as frequently as every second (minimum frequency of one second), but the minimum aggregation interval is one minute.
 
 Open the crontab file:
 ```sh
@@ -118,12 +118,12 @@ crontab -e
 
 **IMPORTANT**: If you have changed the script location, update the below commands with the new location.
 
-**Oracle Linux / CentOS**
+**Oracle Linux 7**
 ```sh
 * * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
 
-**Ubuntu**
+**Ubuntu 16.04 / Ubuntu 18.04**
 ```sh
 * * * * * sh /home/ubuntu/oci-gpu-monitoring/publishGPUMetrics.sh
 ```
@@ -155,7 +155,7 @@ You should see the following line (or similar to it if you have changed the loca
 
 **Metric Name**: Default values are `gpuMemoryUtilization`, `gpuTemperature`, and `gpuUtilization`. Let's choose `gpuTemperature` so we can see some non-zero data.
 
-**Interval:** Default value is `1m`. Select any value in the console that suits your needs.
+**Interval:** Default value is `1m`. Select any value in the console that suits your needs. While custom metrics can be posted as frequently as every second (minimum frequency of one second), the minimum aggregation interval is one minute.
 
 **Statistic:** Default value is `Mean`. Select any value in the console that suits your needs.
 

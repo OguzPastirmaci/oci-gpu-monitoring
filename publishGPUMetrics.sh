@@ -7,8 +7,8 @@ exec 1>>/tmp/gpuMetrics.log 2>&1
 date
 
 # OCI CLI binary location
-# Default installation location for Oracle Linux and CentOS is /home/opc/bin/oci
-# Default installation location for Ubuntu is /home/ubuntu/bin/oci
+# Default installation location for Oracle Linux 7 is /home/opc/bin/oci
+# Default installation location for Ubuntu 18.04 and Ubuntu 16.04 is /home/ubuntu/bin/oci
 cliLocation="/home/opc/bin/oci"
 
 # Check if OCI CLI, nvidia-smi, jq, and curl is installed
