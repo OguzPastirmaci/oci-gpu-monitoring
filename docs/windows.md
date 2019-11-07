@@ -19,7 +19,7 @@ You can install the OCI CLI by running the following command:
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.ps1'))"
 ```
 
-**IMPORTANT:** If you change the default installation location of the CLI, or use Ubuntu as the OS, make sure you update the `cliLocation` variable in the shell script.
+**IMPORTANT:** If you change the default installation location of the CLI, make sure you update the `cliLocation` variable in the shell script.
 
 ```sh
 # OCI CLI binary location
@@ -65,6 +65,8 @@ Thu Nov 07 21:05:43 2019
 ```
 
 ## Steps for publishing GPU metrics to OCI Monitoring service
+
+**IMPORTANT:** Run all of the commands below in an elevated PowerShell prompt (Run as administrator).
 
 1. Create a directory in your user's home directory.
    
@@ -112,7 +114,7 @@ Thursday, November 7, 2019 11:25:51 PM
 
 The below script will create a scheduled task. You may also create it using the Task Scheduler UI.
 ```sh
-  # Name of the scheduled task
+# Name of the scheduled task
 $taskName = "oci-gpu-monitoring"
 
 # Script and log location defaults. Change if you need to.
