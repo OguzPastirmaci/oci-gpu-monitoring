@@ -66,24 +66,24 @@ Thu Nov 07 21:05:43 2019
 
 ## Steps for publishing GPU metrics to OCI Monitoring service
 
-1. Create a directory in your user's home directory
+1. Create a directory in your user's home directory.
    
 ```sh
 New-Item -Name "oci-gpu-monitoring" -Path $Home -ItemType Directory 
 ```
 
-2. Download the script from GitHub
+2. Download the script from GitHub.
 
 ```sh
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OguzPastirmaci/oci-gpu-monitoring/master/publishGPUMetrics.ps1" -OutFile "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1"
  ```
 
-3. Unblock the script so you could run it
+3. Unblock the script so you could run it.
 ```sh
 Unblock-File "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1" 
 ```
 
-4. Change to the directory
+4. Change to the directory.
 ```sh
 cd "$Home\oci-gpu-monitoring"
 ```
