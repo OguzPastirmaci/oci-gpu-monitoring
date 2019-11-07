@@ -27,11 +27,11 @@ $endpointRegion = $getMetadata.canonicalRegionName
 
 # Getting data from nvidia-smi and converting them to OCI monitoring compliant values. This script publishes GPU Temperature, GPU Utilization, and GPU Memory Utilization.
 # Run "nvidia-smi --help-query-gpu" to get the list of available metrics.
-$nvidiaTimestamp = (nvidia-smi.exe --query-gpu=timestamp --format=csv, noheader, nounits)
+$nvidiaTimestamp = (nvidia-smi.exe --query-gpu=timestamp --format=csv,noheader,nounits)
 $gpuTimestamp = ($nvidiaTimestamp.Replace(" ", "T").Replace("/", "-")).Substring(0, $nvidiaTimestamp.IndexOf('.')) + "Z"
-$gpuTemperature = (nvidia-smi.exe --query-gpu=temperature.gpu --format=csv, noheader, nounits)
-$gpuUtilization = (nvidia-smi.exe --query-gpu=utilization.gpu --format=csv, noheader, nounits)
-$gpuMemoryUtilization = (nvidia-smi.exe --query-gpu=utilization.memory --format=csv, noheader, nounits)
+$gpuTemperature = (nvidia-smi.exe --query-gpu=temperature.gpu --format=csv,noheader,nounits)
+$gpuUtilization = (nvidia-smi.exe --query-gpu=utilization.gpu --format=csv,noheader,nounits)
+$gpuMemoryUtilization = (nvidia-smi.exe --query-gpu=utilization.memory --format=csv,noheader,nounits)
 
 $metricsJson = @"
 [
