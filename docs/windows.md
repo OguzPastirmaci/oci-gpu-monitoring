@@ -1,7 +1,5 @@
 # Step by step instructions for Windows
 
-# WORK IN PROGRESS
-
 ## Prerequisites
 
 ### IAM Policy
@@ -90,17 +88,18 @@ Unblock-File "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1"
 cd "$Home\oci-gpu-monitoring"
 ```
 
-4. We will create a scheduled task to run the script every minute, but before that let's run the script manually to check that we don't get any errors.
+5. We will create a scheduled task to run the script every minute and wrote logs to `$Home\oci-gpu-monitoring\gpuMetrics.log`, but before that let's run the script manually to check that we don't get any errors.
 
 ```sh
  .\publishGPUMetrics.ps1 
 ```
 
-5. You should see an output similar to following if the script has run successfully.
+6. You should see an output similar to following if the script has run successfully.
 
 ```sh
- PS C:\Users\opc\oci-gpu-monitoring> C:\Users\opc\oci-gpu-monitoring\publishGPUMetrics.ps1
+PS C:\Users\opc\oci-gpu-monitoring> .\publishGPUMetrics.ps1
 
+Thursday, November 7, 2019 11:25:51 PM
 {
   "data": {
     "failed-metrics": [],
@@ -109,41 +108,40 @@ cd "$Home\oci-gpu-monitoring"
 } 
 ```
 
-6. If you don't see any errors in the output, let's create a Cron job so the script runs automatically. The example job below runs the script every minute, but you can change the frequency of the Cron job depending on your needs. Custom metrics can be posted as frequently as every second (minimum frequency of one second), but the minimum aggregation interval is one minute.
+7. If you don't see any errors in the output, let's create a scheduled task so the script runs automatically. The example job below runs the script every minute, but you can change the frequency of the scheduled task depending on your needs. Custom metrics can be posted as frequently as every second (minimum frequency of one second), but the minimum aggregation interval is one minute.
 
-Open the crontab file:
+The below script will create a scheduled task. You may also create it using the Task Scheduler UI.
 ```sh
-crontab -e
-```
+  # Name of the scheduled task
+$taskName = "oci-gpu-monitoring"
 
-7. Add the following line then save the file:
+# Script and log location defaults. Change if you need to.
+$scriptLocation = "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1"
+$logLocation = "$Home\oci-gpu-monitoring\gpuMetrics.log"
+$script =  "$scriptLocation 2>&1 > $logLocation"
 
-**IMPORTANT**: If you have changed the script location, update the below commands with the new location.
+# Running frequency
+$frequency = (New-TimeSpan -Minutes 1)
 
-**Oracle Linux 7**
-```sh
-* * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
-```
+$action = New-ScheduledTaskAction –Execute "$pshome\powershell.exe" -Argument "$script; quit"
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $frequency
 
-**Ubuntu 16.04 / Ubuntu 18.04**
-```sh
-* * * * * sh /home/ubuntu/oci-gpu-monitoring/publishGPUMetrics.sh
-```
+# The script will ask for username & password that will run the task 
+$msg = "Enter the username and password that will run the task"; 
+$credential = $Host.UI.PromptForCredential("Task username and password",$msg,"$env:userdomain\$env:username",$env:userdomain)
+$username = $credential.UserName
+$password = $credential.GetNetworkCredential().Password
+$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd
+ 
+Register-ScheduledTask -TaskName $jobname -Action $action -Trigger $trigger -RunLevel Highest -User $username -Password $password -Settings $settings
+ ```
 
-8. Check the Cron jobs list to make sure the job is listed:
-```sh
-crontab -l
-```
+8. Let's check if we see the task in Task Scheduler. Run `taskschd.msc` in a PowerShell to open Task Scheduler and you should see a task with the name you created in the previous step.
 
-You should see the following line (or similar to it if you have changed the location of the script) in the list of jobs:
 
-```sh
-[opc@gputest oci-gpu-monitoring]$ crontab -l
+![](../images/task-scheduler.png)
 
-* * * * * sh /home/opc/oci-gpu-monitoring/publishGPUMetrics.sh
-```
-
-9. Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
+9.  Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
 
 ![](../images/console-monitoring.png)
 
