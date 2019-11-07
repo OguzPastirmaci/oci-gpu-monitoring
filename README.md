@@ -8,6 +8,6 @@ If you encounter any problems when following this guide, feel free to create an 
 
 # [Step by step instructions for Linux](../master/docs/linux.md)
 
-# [Step by step instructions for Windows](./docs/windows.md)
+# [Step by step instructions for Windows](../master/docs/windows.md)
 
 
