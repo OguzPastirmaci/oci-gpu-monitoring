@@ -193,7 +193,7 @@ nvidia-smi.exe --help-query-gpu
 For example, let's say you want to publish total free memory of the GPU. You can add the following variable to the script:
 
 ```sh
-$gpuFreeMemory = (nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)
+$gpuFreeMemory = (nvidia-smi.exe --query-gpu=memory.free --format=csv,noheader,nounits)
 ```
 
 Then add a new block in the json payload in the script that is sent to OCI Monitoring service.
