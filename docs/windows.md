@@ -80,7 +80,7 @@ New-Item -Name "oci-gpu-monitoring" -Path $Home -ItemType Directory
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OguzPastirmaci/oci-gpu-monitoring/master/publishGPUMetrics.ps1" -OutFile "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1"
  ```
 
-3. Unblock the script so you could run it.
+3. Unblock the script so you can run it.
 ```sh
 Unblock-File "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1" 
 ```
@@ -90,7 +90,7 @@ Unblock-File "$Home\oci-gpu-monitoring\publishGPUMetrics.ps1"
 cd "$Home\oci-gpu-monitoring"
 ```
 
-5. We will create a scheduled task to run the script every minute and wrote logs to `$Home\oci-gpu-monitoring\gpuMetrics.log`, but before that let's run the script manually to check that we don't get any errors.
+5. We will create a scheduled task to run the script every minute and write logs to `$Home\oci-gpu-monitoring\gpuMetrics.log`, but before that let's run the script manually to check that we don't get any errors.
 
 ```sh
  .\publishGPUMetrics.ps1 
@@ -135,7 +135,7 @@ $username = $credential.UserName
 $password = $credential.GetNetworkCredential().Password
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd
  
-Register-ScheduledTask -TaskName $jobname -Action $action -Trigger $trigger -RunLevel Highest -User $username -Password $password -Settings $settings
+Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -RunLevel Highest -User $username -Password $password -Settings $settings
  ```
 
 8. Let's check if we see the task in Task Scheduler. Run `taskschd.msc` in a PowerShell to open Task Scheduler and you should see a task with the name you created in the previous step.
