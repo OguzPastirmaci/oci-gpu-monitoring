@@ -6,8 +6,8 @@ However, it's possible to [publish custom metrics](https://docs.cloud.oracle.com
 
 If you encounter any problems when following this guide, feel free to create an [issue](https://github.com/OguzPastirmaci/oci-gpu-monitoring/issues).
 
-# [Step by step instructions for Linux](../master/docs/linux.md)
+## [Step by step instructions for Linux](../master/docs/linux.md)
 
-# [Step by step instructions for Windows](../master/docs/windows.md)
+## [Step by step instructions for Windows](../master/docs/windows.md)
 
 
