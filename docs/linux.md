@@ -65,7 +65,7 @@ Wed Oct 30 18:29:24 2019
 sudo yum install -y git
 ```
 
-**Ubuntu 16.04 / Ubuntu 18.04**
+**Ubuntu**
 ```sh
 sudo apt-get install -y git
 ```
@@ -83,7 +83,8 @@ cd oci-gpu-monitoring/scripts
 4. We will create a Cron job to run the script every minute, but before that let's run the script manually to check that we don't get any errors.
 
 ```sh
-sh ./publishGPUMetrics.sh
+sudo chmod +x /publishGPUMetrics.sh
+./publishGPUMetrics.sh
 ```
 
 5. By default, the script writes logs to `/tmp/gpuMetrics.log`. Check the logs to see if there were any errors. You should see a log similar to following if the script has run successfully.
