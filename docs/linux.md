@@ -58,16 +58,16 @@ Wed Oct 30 18:29:24 2019
 
 ## Steps for publishing GPU metrics to OCI Monitoring service
 
-1. Install git
+1. Install git & jq
 
 **Oracle Linux 7**
 ```sh
-sudo yum install -y git
+sudo yum install -y git jq
 ```
 
 **Ubuntu**
 ```sh
-sudo apt-get install -y git
+sudo apt-get install -y git jq
 ```
 
 2. Clone this repository
