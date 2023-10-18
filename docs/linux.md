@@ -83,7 +83,7 @@ cd oci-gpu-monitoring/scripts
 4. We will create a Cron job to run the script every minute, but before that let's run the script manually to check that we don't get any errors.
 
 ```sh
-sudo chmod +x /publishGPUMetrics.sh
+sudo chmod +x publishGPUMetrics.sh
 ./publishGPUMetrics.sh
 ```
 
