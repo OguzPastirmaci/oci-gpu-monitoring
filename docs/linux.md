@@ -114,12 +114,12 @@ crontab -e
 
 **Oracle Linux 7**
 ```sh
-* * * * * sh /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
+* * * * * bash /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
 
 **Ubuntu 16.04 / Ubuntu 18.04**
 ```sh
-* * * * * sh /home/ubuntu/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
+* * * * * bash /home/ubuntu/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
 
 8. Check the Cron jobs list to make sure the job is listed:
@@ -132,7 +132,7 @@ You should see the following line (or similar to it if you have changed the loca
 ```sh
 [opc@gputest oci-gpu-monitoring]$ crontab -l
 
-* * * * * sh /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
+* * * * * bash /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
 
 9. Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
