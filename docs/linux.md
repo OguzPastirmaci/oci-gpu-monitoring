@@ -68,9 +68,9 @@ Sun Oct 22 21:48:24 2023
 sudo yum install -y git jq
 ```
 
-**Ubuntu**
+**Ubuntu 20/22**
 ```sh
-sudo apt-get install -y git jq
+sudo apt install -y git jq
 ```
 
 2. Clone this repository
@@ -120,7 +120,7 @@ crontab -e
 * * * * * bash /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
 
-**Ubuntu 16.04 / Ubuntu 18.04**
+**Ubuntu 20/22**
 ```sh
 * * * * * bash /home/ubuntu/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
