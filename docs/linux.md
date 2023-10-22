@@ -135,9 +135,7 @@ You should see the following line (or similar to it if you have changed the loca
 * * * * * bash /home/opc/oci-gpu-monitoring/scripts/publishGPUMetrics.sh
 ```
 
-9. Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Monitoring > Metrics Explorer**.
-
-![](../images/console-monitoring.png)
+9. Wait for a couple of minutes for the script to run and publish the metrics. Then login to OCI console and check if the metrics are available in OCI Monitoring service. After you login to the console, go to **Observability & Management > Monitoring > Metrics Explorer**.
 
 10. In Metrics Explorer, select the following values and click on **Update Chart** in the bottom.
 
