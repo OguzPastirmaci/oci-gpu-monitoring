@@ -84,7 +84,7 @@ cd oci-gpu-monitoring/scripts
 
 ```sh
 sudo chmod +x publishGPUMetrics.sh
-./publishGPUMetrics.sh
+bash ./publishGPUMetrics.sh
 ```
 
 5. By default, the script writes logs to `/tmp/gpuMetrics.log`. Check the logs to see if there were any errors. You should see a log similar to following if the script has run successfully.
