@@ -23,7 +23,7 @@ bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scrip
 ```sh
 # OCI CLI binary location
 # Default installation location for Oracle Linux 7 is /home/opc/bin/oci
-# Default installation location for Ubuntu 18.04 and Ubuntu 16.04 is /home/ubuntu/bin/oci
+# Default installation location for Ubuntu 20.04 and Ubuntu 22.04 is /home/ubuntu/bin/oci
 cliLocation="/home/opc/bin/oci"
 ```
 
